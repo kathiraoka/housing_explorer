@@ -1,0 +1,69 @@
+---
+title: "Data for D3 Housing"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyr)
+library(dplyr)
+library(readr)
+
+housing_quantiles <- read_csv("Housing Quantiles.csv")
+housing_unique <- read_csv("housing_unique.csv")
+nicknames <- read_csv("nicknames1.csv")
+
+housing_quantiles <- unique(housing_quantiles)
+housing_quantiles <- housing_quantiles[-1,]
+
+nicknames <- nicknames %>% 
+  select(-X1)
+nicknames <- nicknames[-1,]
+nicknames <- unique(nicknames)
+
+housing_d3 <- housing_unique %>%
+  full_join(housing_quantiles, by = "geo") %>%
+  full_join(nicknames, by = "affgeoid")
+
+housing_d3 <- housing_d3 %>%
+  mutate(HigherEd = OnlyBachelors_16+OnlyGraduate_16,
+         QuantHigherEd = rank(HigherEd, na.last = "keep")/length(HigherEd)) 
+
+write.csv(housing_d3, "housing_d3.csv")
+
+remove = subset(housing_d3, Nickname == NA)
+
+housing_quantiles <- housing_d3 %>%
+  mutate(
+         `Tract Name` = Nickname,
+         `Public Transportation` = round(QuantPubTrans_16 * 100), 
+         `Average Communte Time` = round(QuantMeanTime_16 *100), 
+         `Unemployment Rate` = round(QuantUnempRate_16 * 100), 
+         `Home Vacancy Rate` = round(QuantVacancyPercent_16 * 100), 
+         `Rental Vacancy Rate` = round(QuantRentalVacancyRate_16 * 100), 
+         `Median Home Value` = round(QuantMedianValue_16 * 100), 
+         `Median Rent` = round(QuantRentMedian_16 * 100), 
+         `Median Income` = round(QuantMedianIncome_16 * 100), 
+         `Population with Higher Ed Degree` = round(QuantHigherEd * 100)) %>%
+  select(`Tract Name`,
+          geo,
+          affgeoid,
+         `Public Transportation`, 
+         `Average Communte Time`, 
+         `Unemployment Rate`, 
+         `Home Vacancy Rate`, 
+         `Rental Vacancy Rate`, 
+         `Median Home Value`, 
+         `Median Rent`, 
+         `Median Income`, 
+         `Population with Higher Ed Degree`)
+
+housing_quantiles <- housing_quantiles %>% drop_na(`Tract Name`)
+ 
+
+write.csv(housing_quantiles, "d3_quantiles.csv")
+
+```
