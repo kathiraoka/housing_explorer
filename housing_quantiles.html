@@ -171,8 +171,6 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     }
   });
 
-  // var format_cells = d3.format(",.1%");
-
   function tabulate(data, columns) {
     console.log("did I even call this function?", data);
     var output = d3.select("body").append("table")
@@ -191,7 +189,7 @@ d3.csv("d3_quantiles.csv").then(function(data) {
             .append("tr")
                 .attr("class", "row_names");
         var cells = rows.selectAll("td")
-            .data(function(row) {
+            .data(function row(row) {
                 return columns.map(function(column) {
                     return {column: column, value: row[column]};
                 });
@@ -200,6 +198,7 @@ d3.csv("d3_quantiles.csv").then(function(data) {
             .append("td")
             .attr("style", "font: 12px Courier") // sets the font style
                 .html(function(d) { return d.value ; });
+
         return output;
     }
 
@@ -344,7 +343,7 @@ d3.csv("d3_quantiles.csv").then(function(data) {
         return true;
       }
     });
-
+    console.log("selected", selected);
     // show ticks for active brush dimensions
     // and filter ticks to only those within brush extents
     /*
@@ -376,22 +375,70 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     ctx.clearRect(0,0,width,height);
     ctx.globalAlpha = d3.min([0.85/Math.pow(selected.length,0.3),1]);
     render(selected);
-    console.log("selected", selected);
-    console.log("output", output);
 
     // var new_output = output.text(d3.tsvFormat(selected.slice(0,24)))
 
-    var output = tabulate(selected, ["Tract Name",
-                      "Median Home Value",
-                      "Median Rent",
-                      "Median Income",
-                      "Unemployment Rate",
-                      "Home Vacancy Rate",
-                      "Rental Vacancy Rate",
-                      "Population with Higher Ed Degree",
-                      "Public Transportation",
-                      "Average Commute Time"]);
+    // var rows = tbody.selectAll("tr")
+    //               .data(selected)
+    //               .enter().append("tr")
+    //               .exit().remove();
 
+    // var new_output = output
+    //   .data(selected);
+    //
+    // new_output.exit().remove();
+    //
+    // new_output.select("table").selectAll("tr")
+    //   .enter().append("table")
+    //       .text(tabulate(selected, ["Tract Name",
+    //                       "Median Home Value",
+    //                       "Median Rent",
+    //                       "Median Income",
+    //                       "Unemployment Rate",
+    //                       "Home Vacancy Rate",
+    //                       "Rental Vacancy Rate",
+    //                       "Population with Higher Ed Degree",
+    //                       "Public Transportation",
+    //                       "Average Commute Time"]));
+
+    // var new_output = output
+    //   .data(selected);
+    //
+    // new_output.select("table").selectAll("tr")
+    //   .enter().append("table")
+    //     .merge(output)
+    //       .text(tabulate(selected, ["Tract Name",
+    //                       "Median Home Value",
+    //                       "Median Rent",
+    //                       "Median Income",
+    //                       "Unemployment Rate",
+    //                       "Home Vacancy Rate",
+    //                       "Rental Vacancy Rate",
+    //                       "Population with Higher Ed Degree",
+    //                       "Public Transportation",
+    //                       "Average Commute Time"]));
+    //
+    // new_output.exit().remove();
+
+    var rows = tbody.selectAll("tr")
+      .data(selected);
+    console.log("rows", rows);
+
+    tbody.selectAll("tr")
+      .enter().append("tr")
+        .merge(tbody)
+          .text(tabulate(selected, ["Tract Name",
+                          "Median Home Value",
+                          "Median Rent",
+                          "Median Income",
+                          "Unemployment Rate",
+                          "Home Vacancy Rate",
+                          "Rental Vacancy Rate",
+                          "Population with Higher Ed Degree",
+                          "Public Transportation",
+                          "Average Commute Time"]));
+
+    rows.exit().remove();
   }
 });
 
