@@ -48,7 +48,7 @@ body {
   opacity: 1;
 }
 .axis.active .title {
-  font-weight: bold;
+  font-weight: normal;
 }
 .axis.active .tick text {
   opacity: 1;
@@ -74,4 +74,10 @@ pre {
 }
 td {
   text-align: center;
+}
+.path--clicked {
+  fill: none;
+  stroke: black;
+  stroke-width: .5px;
+  cursor: pointer;
 }

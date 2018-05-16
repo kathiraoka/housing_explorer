@@ -13,8 +13,12 @@ var margin = {top: 75, right: 130, bottom: 20, left: 160},
 
 var devicePixelRatio = window.devicePixelRatio || 1;
 
-var color = d3.scaleOrdinal()
-  .range(["#5DA5B3","#D58323","#DD6CA7","#54AF52","#8C92E8","#E15E5A","#725D82","#776327","#50AB84","#954D56","#AB9C27","#517C3F","#9D5130","#357468","#5E9ACF","#C47DCB","#7D9E33","#DB7F85","#BA89AD","#4C6C86","#B59248","#D8597D","#944F7E","#D67D4B","#8F86C2"]);
+// var color = d3.scaleLinear()
+//   .range(["#5DA5B3","#D58323","#DD6CA7","#54AF52","#8C92E8","#E15E5A","#725D82","#776327","#50AB84","#954D56","#AB9C27","#517C3F","#9D5130","#357468","#5E9ACF","#C47DCB","#7D9E33","#DB7F85","#BA89AD","#4C6C86","#B59248","#D8597D","#944F7E","#D67D4B","#8F86C2"]);
+
+var color = d3.scaleLinear()
+    .domain([0, 100])
+    .range(["blue", "red"])
 
 var types = {
   "Number": {
@@ -39,6 +43,8 @@ var types = {
     defaultScale: d3.scaleTime().range([0, innerHeight])
   }
 };
+
+var selectedDimension = "Median Home Value";
 
 var dimensions = [
   // {
@@ -120,7 +126,7 @@ var dimensions = [
     //   })
   // }
 ];
-//console.log(dimensions)
+console.log("dimsensions", dimensions)
 
 var xscale = d3.scalePoint()
     .domain(d3.range(dimensions.length))
@@ -159,11 +165,12 @@ var axes = svg.selectAll(".axis")
     .attr("class", function(d) { return "axis " + d.key.replace(/ /g, "_"); })
     .attr("transform", function(d,i) { return "translate(" + xscale(i) + ")"; });
 
+
 d3.csv("d3_quantiles.csv").then(function(data) {
 
   data.forEach(function(d) {
     dimensions.forEach(function(p) {
-      d[p.key] = !d[p.key] ? null : p.type.coerce(d[p.key]);
+      d[p.key] = d[p.key] === "*" ? null : p.type.coerce(d[p.key]);
     });
     // truncate long text strings to fit in data table
     for (var key in d) {
@@ -173,9 +180,10 @@ d3.csv("d3_quantiles.csv").then(function(data) {
 
   function tabulate(data, columns) {
     console.log("did I even call this function?", data);
-    var output = d3.select("body").append("table")
-        thead = output.append("thead"),
-        tbody = output.append("tbody");
+
+    var output = d3.select("body").append("table");
+    var thead = output.append("thead");
+    tbody = output.append("tbody");
         thead.append("tr")
             .selectAll("th")
             .data(columns)
@@ -244,6 +252,9 @@ d3.csv("d3_quantiles.csv").then(function(data) {
       .attr("text-anchor", "start")
       .text(function(d) { return "description" in d ? d.description : d.key; });
 
+  var axis_title = d3.selectAll("g").selectAll(".title");
+  console.log("axis_title", axis_title);
+
   // Add and store a brush for each axis.
   axes.append("g")
       .attr("class", "brush")
@@ -259,7 +270,7 @@ d3.csv("d3_quantiles.csv").then(function(data) {
       .attr("x", -8)
       .attr("width", 16);
 
-  d3.selectAll(".axis.food_group .tick text")
+  d3.selectAll(".axis .tick text")
     .style("fill", color);
 
   function project(d) {
@@ -275,7 +286,7 @@ d3.csv("d3_quantiles.csv").then(function(data) {
   };
 
   function draw(d) {
-    ctx.strokeStyle = color(d.MedianValue_16);
+    ctx.strokeStyle = color(d[selectedDimension]);
     ctx.beginPath();
     var coords = project(d);
     // console.log("coords", coords);
@@ -310,12 +321,11 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     });
     ctx.stroke();
   }
-  // console.log("ctx", ctx);
-      //This is also working.
 
   function brushstart() {
     d3.event.sourceEvent.stopPropagation();
   }
+
 
 
   // Handles a brush event, toggling the display of foreground lines.
@@ -420,11 +430,11 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     //
     // new_output.exit().remove();
 
-    var rows = tbody.selectAll("tr")
-      .data(selected);
-    console.log("rows", rows);
+    // var rows = tbody.selectAll("tr")
+    //   .data(selected);
 
-    tbody.selectAll("tr")
+    d3.select("body").select("tbody")
+      .data(selected)
       .enter().append("tr")
         .merge(tbody)
           .text(tabulate(selected, ["Tract Name",
@@ -436,11 +446,25 @@ d3.csv("d3_quantiles.csv").then(function(data) {
                           "Rental Vacancy Rate",
                           "Population with Higher Ed Degree",
                           "Public Transportation",
-                          "Average Commute Time"]));
+                          "Average Commute Time"]))
+        .exit().remove();
+  }
 
-    rows.exit().remove();
+  axes.on("click", function (d) {
+    console.log(d);
+    edge_clicked(this, d.key);
+  });
+
+  function edge_clicked(elem, dimension) {
+    selectedDimension = dimension;
+    d3.selectAll("g").selectAll("rect")
+      .classed("path--clicked", false);
+    var clicked = d3.select(elem).select("rect");
+    clicked.classed("path--clicked", true);
   }
 });
+
+
 
 function d3_functor(v) {
   return typeof v === "function" ? v : function() { return v; };
