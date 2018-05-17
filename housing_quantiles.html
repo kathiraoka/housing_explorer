@@ -307,6 +307,7 @@ d3.csv("d3_quantiles.csv").then(function(data) {
 
   function draw(d) {
     ctx.strokeStyle = color(d[selectedDimension]);
+    console.log("color?", selectedDimension);
     ctx.beginPath();
     var coords = project(d);
     // console.log("coords", coords);
@@ -420,8 +421,14 @@ d3.csv("d3_quantiles.csv").then(function(data) {
   }
 
 
-  axes.on("click", function (d) {
-    console.log("d.key", d.key);
+  d3.selectAll(".axis .title").on("click", function (d) {
+    console.log("title d.key", JSON.stringify(d.key));
+    edge_clicked(this, d.key);
+    brush();
+  });
+
+  d3.selectAll(".axis .brush").on("click", function (d) {
+    console.log("brush d.key", JSON.stringify(d.key));
     edge_clicked(this, d.key);
   });
 
@@ -430,9 +437,26 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     console.log("selectedDimension", selectedDimension);
     d3.selectAll("g").selectAll(".axis .title")
       .classed("path--clicked", false);
-    var clicked = d3.select(elem).select(".axis .title");
+    // select the parent before the last selection.
+    var clicked = d3.select(elem);
+    // .select(elem.parentNode).select(".axis .title");
     clicked.classed("path--clicked", true);
   }
+
+  // d3.selectAll(".axis .title").on("click", function (d) {
+  //   console.log("d.key", d.key);
+  //   edge_clicked(this, d.key);
+  // });
+  //
+  // function edge_clicked(elem, dimension) {
+  //   selectedDimension = dimension;
+  //   console.log("selectedDimension", selectedDimension);
+  //   d3.selectAll("g").selectAll(".axis .title")
+  //     .classed("path--clicked", false);
+  //   var clicked = d3.select(elem)
+  //   // .select(".axis .title");
+  //   clicked.classed("path--clicked", true);
+  // }
 
   // axes.on("click", function (d) {
   //   console.log("d.key", d.key);
