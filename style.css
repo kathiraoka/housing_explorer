@@ -77,7 +77,7 @@ td {
 }
 .path--clicked {
   fill: none;
-  stroke: black;
+  stroke: orange;
   stroke-width: .5px;
   cursor: pointer;
 }
