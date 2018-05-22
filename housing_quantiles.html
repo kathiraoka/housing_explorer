@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<title>Housing Parallel Coordinates (Quantiles)</title>
+<title>2016 Affordable Housing Index Explorer</title>
+<header>
+  2016 AFFORDABLE HOUSING INDEX EXPLORER
+</header>
 <body>
-<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://d3js.org/d3.v5.js"></script>
 <script src="https://bl.ocks.org/syntagmatic/raw/3341641/render-queue.js"></script>
 <link rel="stylesheet" href="style.css"></link>
 <script>
@@ -13,12 +16,18 @@ var margin = {top: 75, right: 130, bottom: 20, left: 160},
 
 var devicePixelRatio = window.devicePixelRatio || 1;
 
-// var color = d3.scaleLinear()
-//   .range(["#5DA5B3","#D58323","#DD6CA7","#54AF52","#8C92E8","#E15E5A","#725D82","#776327","#50AB84","#954D56","#AB9C27","#517C3F","#9D5130","#357468","#5E9ACF","#C47DCB","#7D9E33","#DB7F85","#BA89AD","#4C6C86","#B59248","#D8597D","#944F7E","#D67D4B","#8F86C2"]);
-
 var color = d3.scaleLinear()
     .domain([0, 100])
-    .range(["blue", "teal"])
+    .range(["blue", "teal"]);
+
+// var color_else = d3.scaleLinear()
+//     .domain([0, 100])
+//     .range(["blue", "teal"]);
+
+// var color = d3.scaleLinear( function(d) {
+//   if (selectedRow) { return "yellow" }
+//   else {return color_else}
+// });
 
 var types = {
   "Number": {
@@ -45,17 +54,9 @@ var types = {
 };
 
 var selectedDimension = "Median Home Value";
+var selectedRow = "";
 
 var dimensions = [
-  // {
-  //   key: "Nickname",
-  //   description: "Census Tract Name",
-  //   type: types["String"],
-  //   axis: d3.axisLeft()
-  //     .tickFormat(function(d,i) {
-  //       return d;
-  //     })
-  // },
   {
     key: "Median Home Value",
     type: types["Number"],
@@ -114,19 +115,8 @@ var dimensions = [
     type: types["Number"],
     scale: d3.scaleLinear().range([innerHeight, 0])
     // scale: d3.scaleSqrt().range([innerHeight, 0])
-  },
-  // {
-    // key: "manufac_name",
-    // description: "Manufacturer",
-    // type: types["String"],
-    // axis: d3.axisRight()
-    //   .tickFormat(function(d,i) {
-    //     if (d == null) return "(null)";
-    //     return i % 5 == 0 ? d.slice(0,22) : "";
-    //   })
-  // }
+  }
 ];
-console.log("dimsensions", dimensions)
 
 var xscale = d3.scalePoint()
     .domain(d3.range(dimensions.length))
@@ -181,19 +171,26 @@ d3.csv("d3_quantiles.csv").then(function(data) {
   function tabulate(data, columns) {
     console.log("did I even call this function?", data);
 
+    // let table_color = "white";
+    //   if (data.geo === selectedTable) {
+    //     table_color = "#FF0000";
+    //   };
+    // console.log("selectedTable", selectedTable);
+
     let table = d3.select("table");
     if (!table.node()) {
       table = d3.select("body").append("table");
-      table.append("thead")
+      table.append("thead").append("tr")
         .selectAll("th")
         .data(columns)
         .enter()
         .append("th")
-        .attr("class", "header")
-        .text(function(column) { return column; });
+        .attr("class", function(column) { return column; })
+        .text(function(column) { return column; })
       table.append("tbody");
     }
     let tbody = d3.select("tbody");
+
     let rowsUpdate = tbody.selectAll("tr")
       .data(data)
 
@@ -201,7 +198,14 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     let rowsEnter = rowsUpdate
       .enter()
       .append("tr")
-      .attr("class", "row_names");
+
+    rowsUpdate.style("background-color", function(d) {
+        console.log(selectedRow, d.affgeoid);
+        if (d.affgeoid === selectedRow) {
+          return "#FFa62f";
+        }
+      })
+
     // exit selection
     rowsUpdate.exit().remove();
 
@@ -219,7 +223,7 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     cells
       .enter()
       .append("td")
-      .attr("style", "font: 12px Courier") // sets the font style
+      .attr("style", "font: 12px Arial") // sets the font style
       .text(function(d) { return d.value ; });
   }
 
@@ -306,7 +310,26 @@ d3.csv("d3_quantiles.csv").then(function(data) {
   };
 
   function draw(d) {
-    ctx.strokeStyle = color(d[selectedDimension]);
+
+    let thisColor = color(d[selectedDimension]);
+    if (d.affgeoid === selectedRow) {
+      thisColor = "orange";
+    }
+
+    let thisWidth = 1.5;
+    if (d.affgeoid === selectedRow) {
+      thisWidth = 2;
+    }
+
+    let thisAlpha = 0.15;
+    if (d.affgeoid === selectedRow) {
+      thisAlpha = 1;
+    }
+
+    ctx.strokeStyle = thisColor;
+    ctx.lineWidth = thisWidth;
+    ctx.globalAlpha = thisAlpha;
+
     console.log("color?", selectedDimension);
     ctx.beginPath();
     var coords = project(d);
@@ -346,8 +369,6 @@ d3.csv("d3_quantiles.csv").then(function(data) {
   function brushstart() {
     d3.event.sourceEvent.stopPropagation();
   }
-
-
 
   // Handles a brush event, toggling the display of foreground lines.
   function brush() {
@@ -420,59 +441,48 @@ d3.csv("d3_quantiles.csv").then(function(data) {
                           "Average Commute Time"]);
   }
 
-
   d3.selectAll(".axis .title").on("click", function (d) {
     console.log("title d.key", JSON.stringify(d.key));
     edge_clicked(this, d.key);
     brush();
   });
 
-  d3.selectAll(".axis .brush").on("click", function (d) {
-    console.log("brush d.key", JSON.stringify(d.key));
-    edge_clicked(this, d.key);
-  });
+  // d3.selectAll(".axis .brush").on("click", function (d) {
+  //   console.log("brush d.key", JSON.stringify(d.key));
+  //   edge_clicked(this, d.key);
+  // });
 
   function edge_clicked(elem, dimension) {
     selectedDimension = dimension;
     console.log("selectedDimension", selectedDimension);
     d3.selectAll("g").selectAll(".axis .title")
       .classed("path--clicked", false);
-    // select the parent before the last selection.
+    d3.selectAll("g").selectAll("rect")
+      .classed("path--clicked", false);
     var clicked = d3.select(elem);
-    // .select(elem.parentNode).select(".axis .title");
     clicked.classed("path--clicked", true);
   }
 
-  // d3.selectAll(".axis .title").on("click", function (d) {
-  //   console.log("d.key", d.key);
-  //   edge_clicked(this, d.key);
-  // });
-  //
-  // function edge_clicked(elem, dimension) {
-  //   selectedDimension = dimension;
-  //   console.log("selectedDimension", selectedDimension);
-  //   d3.selectAll("g").selectAll(".axis .title")
-  //     .classed("path--clicked", false);
-  //   var clicked = d3.select(elem)
-  //   // .select(".axis .title");
-  //   clicked.classed("path--clicked", true);
+  d3.selectAll("tr")
+    .on("click", function (d) {
+      console.log("this_row", d);
+      selectedTable = d.geo;
+      console.log("geo", d.geo);
+      selectedRow = d.affgeoid;
+      //select_line(this, d.affgeoid);
+      brush();
+    });
+
+  // function select_line(elem, geo) {
+  //   selectedRow = geo;
+  //   console.log("selectedRow", selectedRow);
+  //   //d3.selectAll("canvas")
+  //   //  .classed("row--clicked", false);
+  //   //var row_clicked = d3.select("canvas");
+  //   //row_clicked.classed("row--clicked", true);
   // }
 
-  // axes.on("click", function (d) {
-  //   console.log("d.key", d.key);
-  //   edge_clicked(this, d.key);
-  // });
-  //
-  // function edge_clicked(elem, dimension) {
-  //   selectedDimension = dimension;
-  //   d3.selectAll("g").selectAll("rect")
-  //     .classed("path--clicked", false);
-  //   var clicked = d3.select(elem).select("rect");
-  //   clicked.classed("path--clicked", true);
-  // }
 });
-
-
 
 function d3_functor(v) {
   return typeof v === "function" ? v : function() { return v; };

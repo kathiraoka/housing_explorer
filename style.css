@@ -1,12 +1,35 @@
+header {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  text-align: center;
+  font: 40px Arial;
+  font-weight: bold;
+  color: teal;
+}
 body {
   min-width: 760px;
+}
+canvas {
+  align-content: center;
+}
+table{
+  table-layout: fixed;
+  margin: auto;
+  width: 50%;
+  /* margin-left: 50px;
+  margin-right: 50px; */
+  border-collapse: collapse;
+}
+div {
+  margin: auto;
+  width: 50%;
 }
 .parcoords {
   display: block;
 }
 .parcoords svg,
 .parcoords canvas {
-  font: 10px Courier;
+  font: 10px Arial;
   position: absolute;
 }
 .parcoords canvas {
@@ -14,7 +37,7 @@ body {
   pointer-events: none;
 }
 .axis .title {
-  font: 10px Courier;
+  font: 10px Arial;
   transform: rotate(-21deg) translate(-5px,-6px);
   fill: #222;
 }
@@ -67,17 +90,88 @@ pre {
   font-size: 10px;
   overflow: auto;
 }
-.header {
-  font: 12px Courier;
+th {
+  font: 12px Arial;
+  color: gray;
   font-weight: bold;
-  /* font: Courier; */
+  /* border-bottom: 2px solid gray;
+  border-right: none;
+  border-left: none; */
+}
+
+
+tbody {
+  border-top: 2px solid gray;
 }
 td {
   text-align: center;
+}
+
+tr:nth-of-type(odd) {
+    background: #eee
+}
+tr:nth-of-type(even) {
+    background: white;
+}
+
+
+thead tr {
+  border-bottom: 2px solid gray;
+}
+
+thead tr th {
+  background: white;
+}
+
+.Tract.Name {
+  width: 200px;
+  height: 50px;
+}
+.Median.Home.Value {
+  width: 100px;
+  height: 50px;
+}
+.Median.Rent {
+  width: 100px;
+  height: 50px;
+}
+.Median.Income {
+  width: 100px;
+  height: 50px;
+}
+.Unemployment.Rate {
+  width: 100px;
+  height: 50px;
+}
+.Home.Vacancy.Rate {
+  width: 100px;
+  height: 50px;
+}
+.Rental.Vacancy.Rate {
+  width: 100px;
+  height: 50px;
+}
+.Population.with.Higher.Ed.Degree {
+  width: 100px;
+  height: 50px;
+}
+.Public.Transportation {
+  width: 100px;
+  height: 50px;
+}
+.Average.Commute.Time {
+  width: 100px;
+  height: 50px;
 }
 .path--clicked {
   fill: none;
   stroke: orange;
   stroke-width: .5px;
+  cursor: pointer;
+}
+.row--clicked {
+  fill: yellow;
+  stroke: yellow;
+  stroke-width: 1px;
   cursor: pointer;
 }
