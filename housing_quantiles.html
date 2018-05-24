@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<title>2016 Affordable Housing Index Explorer</title>
-<header>
-  2016 AFFORDABLE HOUSING INDEX EXPLORER
-</header>
-<body>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>2016 Affordable Housing Index Explorer</title>
+  </head>
+  <body>
+    <header>
+      <h1>2016 Affordable Housing Index Explorer</h1>
+    </header>
 <script src="https://d3js.org/d3.v5.js"></script>
 <script src="https://bl.ocks.org/syntagmatic/raw/3341641/render-queue.js"></script>
 <link rel="stylesheet" href="style.css"></link>
+
 <script>
 var margin = {top: 75, right: 130, bottom: 20, left: 160},
     width = document.body.clientWidth - margin.left - margin.right,
@@ -18,16 +23,7 @@ var devicePixelRatio = window.devicePixelRatio || 1;
 
 var color = d3.scaleLinear()
     .domain([0, 100])
-    .range(["blue", "teal"]);
-
-// var color_else = d3.scaleLinear()
-//     .domain([0, 100])
-//     .range(["blue", "teal"]);
-
-// var color = d3.scaleLinear( function(d) {
-//   if (selectedRow) { return "yellow" }
-//   else {return color_else}
-// });
+    .range(["teal", "blue"]);
 
 var types = {
   "Number": {
@@ -118,6 +114,10 @@ var dimensions = [
   }
 ];
 
+var HousingColumns = ["Tract Name", "Median Home Value", "Median Rent", "Home Vacancy Rate", "Rental Vacancy Rate"]
+
+var DemographicColumns = ["Tract Name", "Median Income", "Unemployment Rate", "Population with Higher Ed Degree", "Public Transportation", "Average Commute Time"]
+
 var xscale = d3.scalePoint()
     .domain(d3.range(dimensions.length))
     .range([0, width]);
@@ -127,7 +127,9 @@ var yAxis = d3.axisLeft();
 var container = d3.select("body").append("div")
     .attr("class", "parcoords")
     .style("width", width + margin.left + margin.right + "px")
-    .style("height", height + margin.top + margin.bottom + "px");
+    .style("height", height + margin.top + margin.bottom + "px")
+    // .style("background-color", "#F5F5F5")
+    ;
 
 var svg = container.append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -155,6 +157,8 @@ var axes = svg.selectAll(".axis")
     .attr("class", function(d) { return "axis " + d.key.replace(/ /g, "_"); })
     .attr("transform", function(d,i) { return "translate(" + xscale(i) + ")"; });
 
+d3.selectAll(axes).selectAll(".title")
+  .style("color", "#4D5B5C");
 
 d3.csv("d3_quantiles.csv").then(function(data) {
 
@@ -168,18 +172,14 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     }
   });
 
-  function tabulate(data, columns) {
+  function tabulate(data, columns, tableID) {
     console.log("did I even call this function?", data);
 
-    // let table_color = "white";
-    //   if (data.geo === selectedTable) {
-    //     table_color = "#FF0000";
-    //   };
-    // console.log("selectedTable", selectedTable);
-
-    let table = d3.select("table");
+    let table = d3.select(tableID);
     if (!table.node()) {
-      table = d3.select("body").append("table");
+      table = d3.select("body").append("table").classed(tableID, true);
+    }
+    if (!table.select("thead").node()) {
       table.append("thead").append("tr")
         .selectAll("th")
         .data(columns)
@@ -189,7 +189,7 @@ d3.csv("d3_quantiles.csv").then(function(data) {
         .text(function(column) { return column; })
       table.append("tbody");
     }
-    let tbody = d3.select("tbody");
+    let tbody = d3.select(tableID + " tbody");
 
     let rowsUpdate = tbody.selectAll("tr")
       .data(data)
@@ -223,11 +223,10 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     cells
       .enter()
       .append("td")
-      .attr("style", "font: 12px Arial") // sets the font style
+      .attr("style", "font: 12px Arial")
+      .style("color", "#4D5B5C") // sets the font style
       .text(function(d) { return d.value ; });
   }
-
-
 
   // type/dimension default setting happens here
   dimensions.forEach(function(dim) {
@@ -241,8 +240,6 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     }
     dim.scale.domain(dim.domain);
   });
-
-
 
   var render = renderQueue(draw).rate(50);
 
@@ -284,18 +281,8 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     .style("fill", color);
 
     // creates table
-  tabulate(data, [
-    "Tract Name",
-    "Median Home Value",
-    "Median Rent",
-    "Median Income",
-    "Unemployment Rate",
-    "Home Vacancy Rate",
-    "Rental Vacancy Rate",
-    "Population with Higher Ed Degree",
-    "Public Transportation",
-    "Average Commute Time"
-  ]);
+  tabulate(data, HousingColumns, ".HousingTable");
+  tabulate(data, DemographicColumns, ".DemographicTable");
 
   function project(d) {
     return dimensions.map(function(p,i) {
@@ -429,16 +416,18 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     ctx.globalAlpha = d3.min([0.85/Math.pow(selected.length,0.3),1]);
     render(selected);
 
-    tabulate(selected, ["Tract Name",
-                          "Median Home Value",
-                          "Median Rent",
-                          "Median Income",
-                          "Unemployment Rate",
-                          "Home Vacancy Rate",
-                          "Rental Vacancy Rate",
-                          "Population with Higher Ed Degree",
-                          "Public Transportation",
-                          "Average Commute Time"]);
+    tabulate(selected, HousingColumns, ".HousingTable");
+    tabulate(selected, DemographicColumns, ".DemographicTable");
+
+    d3.selectAll("tr")
+      .on("click", function (d) {
+        console.log("this_row", d);
+        selectedTable = d.geo;
+        console.log("geo", d.geo);
+        selectedRow = d.affgeoid;
+        //select_line(this, d.affgeoid);
+        brush();
+      });
   }
 
   d3.selectAll(".axis .title").on("click", function (d) {
@@ -462,29 +451,15 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     var clicked = d3.select(elem);
     clicked.classed("path--clicked", true);
   }
-
-  d3.selectAll("tr")
-    .on("click", function (d) {
-      console.log("this_row", d);
-      selectedTable = d.geo;
-      console.log("geo", d.geo);
-      selectedRow = d.affgeoid;
-      //select_line(this, d.affgeoid);
-      brush();
-    });
-
-  // function select_line(elem, geo) {
-  //   selectedRow = geo;
-  //   console.log("selectedRow", selectedRow);
-  //   //d3.selectAll("canvas")
-  //   //  .classed("row--clicked", false);
-  //   //var row_clicked = d3.select("canvas");
-  //   //row_clicked.classed("row--clicked", true);
-  // }
-
 });
 
 function d3_functor(v) {
   return typeof v === "function" ? v : function() { return v; };
 };
 </script>
+
+<table class="HousingTable"></table>
+<table class="DemographicTable"></table>
+
+</body>
+</html>
