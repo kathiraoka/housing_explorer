@@ -6,8 +6,11 @@
     <title>2016 Affordable Housing Index Explorer</title>
   </head>
   <body>
-    <header>
-      <h1>2016 Affordable Housing Index Explorer</h1>
+    <header class="c-global-header">
+      <div class="l-wrapper">
+        <div class="c-global-header-logo"></div>
+        <h1>2016 Affordable Housing Index Explorer</h1>
+      </div>
     </header>
 <script src="https://d3js.org/d3.v5.js"></script>
 <script src="https://bl.ocks.org/syntagmatic/raw/3341641/render-queue.js"></script>
@@ -16,7 +19,7 @@
 <script>
 var margin = {top: 75, right: 130, bottom: 20, left: 160},
     width = document.body.clientWidth - margin.left - margin.right,
-    height = 380 - margin.top - margin.bottom,
+    height = 400 - margin.top - margin.bottom,
     innerHeight = height - 2;
 
 var devicePixelRatio = window.devicePixelRatio || 1;
@@ -115,7 +118,6 @@ var dimensions = [
 ];
 
 var HousingColumns = ["Tract Name", "Median Home Value", "Median Rent", "Home Vacancy Rate", "Rental Vacancy Rate"]
-
 var DemographicColumns = ["Tract Name", "Median Income", "Unemployment Rate", "Population with Higher Ed Degree", "Public Transportation", "Average Commute Time"]
 
 var xscale = d3.scalePoint()
@@ -226,16 +228,23 @@ d3.csv("d3_quantiles.csv").then(function(data) {
       .attr("style", "font: 12px Arial")
       .style("color", "#4D5B5C") // sets the font style
       .text(function(d) { return d.value ; });
+
+    d3.selectAll("tr")
+      .on("click", function (d) {
+        console.log("this_row", d);
+        selectedTable = d.geo;
+        console.log("geo", d.geo);
+        selectedRow = d.affgeoid;
+        //select_line(this, d.affgeoid);
+        brush();
+      });
   }
 
-  // type/dimension default setting happens here
   dimensions.forEach(function(dim) {
     if (!("domain" in dim)) {
-      // detect domain using dimension type's extent function
       dim.domain = d3_functor(dim.type.extent)(data.map(function(d) { return d[dim.key]; }));
     }
     if (!("scale" in dim)) {
-      // use type's default scale for dimension
       dim.scale = dim.type.defaultScale.copy();
     }
     dim.scale.domain(dim.domain);
@@ -259,9 +268,6 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     .attr("text-anchor", "start")
     .text(function(d) { return "description" in d ? d.description : d.key; });
 
-  var axis_title = d3.selectAll("g").selectAll(".title");
-  console.log("axis_title", axis_title);
-
   // Add and store a brush for each axis.
   axes.append("g")
       .attr("class", "brush")
@@ -280,13 +286,11 @@ d3.csv("d3_quantiles.csv").then(function(data) {
   d3.selectAll(".axis .tick text")
     .style("fill", color);
 
-    // creates table
   tabulate(data, HousingColumns, ".HousingTable");
   tabulate(data, DemographicColumns, ".DemographicTable");
 
   function project(d) {
     return dimensions.map(function(p,i) {
-      // check if data element has property and contains a value
       if (
         !(p.key in d) ||
         d[p.key] === null
@@ -318,15 +322,11 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     ctx.globalAlpha = thisAlpha;
 
     console.log("color?", selectedDimension);
+
     ctx.beginPath();
     var coords = project(d);
-    // console.log("coords", coords);
-      // Yes, this is running.
     coords.forEach(function(p,i) {
-      // this tricky bit avoids rendering null values as 0
       if (p === null) {
-        // this bit renders horizontal lines on the previous/next
-        // dimensions, so that sandwiched null values are visible
         if (i > 0) {
           var prev = coords[i-1];
           if (prev !== null) {
@@ -357,7 +357,6 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     d3.event.sourceEvent.stopPropagation();
   }
 
-  // Handles a brush event, toggling the display of foreground lines.
   function brush() {
     console.log("brush called");
     render.invalidate();
@@ -418,16 +417,6 @@ d3.csv("d3_quantiles.csv").then(function(data) {
 
     tabulate(selected, HousingColumns, ".HousingTable");
     tabulate(selected, DemographicColumns, ".DemographicTable");
-
-    d3.selectAll("tr")
-      .on("click", function (d) {
-        console.log("this_row", d);
-        selectedTable = d.geo;
-        console.log("geo", d.geo);
-        selectedRow = d.affgeoid;
-        //select_line(this, d.affgeoid);
-        brush();
-      });
   }
 
   d3.selectAll(".axis .title").on("click", function (d) {
@@ -435,11 +424,6 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     edge_clicked(this, d.key);
     brush();
   });
-
-  // d3.selectAll(".axis .brush").on("click", function (d) {
-  //   console.log("brush d.key", JSON.stringify(d.key));
-  //   edge_clicked(this, d.key);
-  // });
 
   function edge_clicked(elem, dimension) {
     selectedDimension = dimension;
@@ -458,7 +442,16 @@ function d3_functor(v) {
 };
 </script>
 
+<a name="linktoHousingTable"></a>
+<div id="nav" class="clearfix">
+  <a href="#linktoDemographicTable">Jump to Demographic Table</a>
+</div>
 <table class="HousingTable"></table>
+
+<a name="linktoDemographicTable"></a>
+<div id="nav" class="clearfix">
+  <a href="#linktoHousingTable">Jump to Housing Table</a>
+</div>
 <table class="DemographicTable"></table>
 
 </body>
