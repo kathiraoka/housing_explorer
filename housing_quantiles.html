@@ -12,14 +12,28 @@
         <h1>2016 Affordable Housing Index Explorer</h1>
       </div>
     </header>
+    <div class="intro-area">
+       <h2 id="graph-header">How to use the 2016 Affordable Housing Index Explorer:</h2>
+       <h2 id="index-header">About the Index:</h2>
+       <div class="graph-intro">
+         <ul>
+           <li>Click and drag on axes to select portions of the data</li>
+           <li>Click on the axis title to color the lines based on that measure</li>
+           <li>Click on a row in the tables to highlight it on the chart</li>
+         </ul>
+       </div>
+       <div class="index-intro">
+           <text id="index-text">Explanation of Index and Dimensions</text>
+       </div>
+    </div>
 <script src="https://d3js.org/d3.v5.js"></script>
 <script src="https://bl.ocks.org/syntagmatic/raw/3341641/render-queue.js"></script>
 <link rel="stylesheet" href="style.css"></link>
 
 <script>
-var margin = {top: 75, right: 130, bottom: 20, left: 160},
+var margin = {top: 90, right: 130, bottom: 0, left: 160},
     width = document.body.clientWidth - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom,
+    height = 450 - margin.top - margin.bottom,
     innerHeight = height - 2;
 
 var devicePixelRatio = window.devicePixelRatio || 1;
@@ -442,12 +456,25 @@ function d3_functor(v) {
 };
 </script>
 
+<div class="housing-line">
+  <svg id="line" width="400" height="5">
+    <rect width="400" height="5" fill="gray"></rect>
+  </svg>
+</div>
+<div class="index-line">
+  <svg id="line" width="400" height="5">
+    <rect width="400" height="5" fill="gray"></rect>
+  </svg>
+</div>
+
+<h4 class="table-header">Housing Table</h4>
 <a name="linktoHousingTable"></a>
 <div id="nav" class="clearfix">
   <a href="#linktoDemographicTable">Jump to Demographic Table</a>
 </div>
 <table class="HousingTable"></table>
 
+<h5 class="table-header">Demographic Table</h5>
 <a name="linktoDemographicTable"></a>
 <div id="nav" class="clearfix">
   <a href="#linktoHousingTable">Jump to Housing Table</a>
