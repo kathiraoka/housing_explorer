@@ -1,31 +1,17 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Fjalla+One|Roboto" rel="stylesheet">
     <title>2016 Affordable Housing Index Explorer</title>
   </head>
   <body>
     <header class="c-global-header">
       <div class="l-wrapper">
-        <div class="c-global-header-logo"></div>
         <h1>2016 Affordable Housing Index Explorer</h1>
       </div>
+      <img src="UHERO-Logo-with-Seal-on-white.jpg" alt="UHERO Logo" id="Logo">
     </header>
-    <div class="intro-area">
-       <h2 id="graph-header">How to use the 2016 Affordable Housing Index Explorer:</h2>
-       <h2 id="index-header">About the Index:</h2>
-       <div class="graph-intro">
-         <ul>
-           <li>Click and drag on axes to select portions of the data</li>
-           <li>Click on the axis title to color the lines based on that measure</li>
-           <li>Click on a row in the tables to highlight it on the chart</li>
-         </ul>
-       </div>
-       <div class="index-intro">
-           <text id="index-text">Explanation of Index and Dimensions</text>
-       </div>
-    </div>
 <script src="https://d3js.org/d3.v5.js"></script>
 <script src="https://bl.ocks.org/syntagmatic/raw/3341641/render-queue.js"></script>
 <link rel="stylesheet" href="style.css"></link>
@@ -83,19 +69,6 @@ var dimensions = [
     // scale: d3.scaleSqrt().range([innerHeight, 0])
   },
   {
-    key: "Median Income",
-    type: types["Number"],
-    scale: d3.scaleLinear().range([innerHeight, 0])
-    // scale: d3.scaleSqrt().range([innerHeight, 0])
-  },
-  {
-    key: "Unemployment Rate",
-    type: types["Number"],
-    scale: d3.scaleLinear()
-              .range([0, innerHeight])
-    // scale: d3.scaleSqrt().range([innerHeight, 0])
-  },
-  {
     key: "Home Vacancy Rate",
     type: types["Number"],
     scale: d3.scaleLinear().range([innerHeight, 0])
@@ -105,6 +78,19 @@ var dimensions = [
     key: "Rental Vacancy Rate",
     type: types["Number"],
     scale: d3.scaleLinear().range([innerHeight, 0])
+    // scale: d3.scaleSqrt().range([innerHeight, 0])
+  },
+  {
+    key: "Median Income",
+    type: types["Number"],
+    scale: d3.scaleLinear().range([innerHeight, 0])
+    // scale: d3.scaleSqrt().range([innerHeight, 0])
+  },
+  {
+    key: "Employment Rate",
+    type: types["Number"],
+    scale: d3.scaleLinear()
+              .range([innerHeight, 0])
     // scale: d3.scaleSqrt().range([innerHeight, 0])
   },
   {
@@ -131,8 +117,8 @@ var dimensions = [
   }
 ];
 
-var HousingColumns = ["Tract Name", "Median Home Value", "Median Rent", "Home Vacancy Rate", "Rental Vacancy Rate"]
-var DemographicColumns = ["Tract Name", "Median Income", "Unemployment Rate", "Population with Higher Ed Degree", "Public Transportation", "Average Commute Time"]
+var HousingColumns = ["Tract Name", "Median Home Value ($)", "Median Rent ($)", "Home Vacancy Rate (%)", "Rental Vacancy Rate (%)"]
+var DemographicColumns = ["Tract Name", "Median Income ($)", "Employment Rate (%)", "Population with Higher Ed Degree (%)", "Public Transportation Users (%)", "Average Commute Time (minutes)"]
 
 var xscale = d3.scalePoint()
     .domain(d3.range(dimensions.length))
@@ -239,7 +225,8 @@ d3.csv("d3_quantiles.csv").then(function(data) {
     cells
       .enter()
       .append("td")
-      .attr("style", "font: 12px Arial")
+      // .attr("style", "font-family: 'Roboto', sans-serif")
+      // .attr("style", "font-size: 12px")
       .style("color", "#4D5B5C") // sets the font style
       .text(function(d) { return d.value ; });
 
@@ -456,30 +443,65 @@ function d3_functor(v) {
 };
 </script>
 
-<div class="housing-line">
-  <svg id="line" width="400" height="5">
-    <rect width="400" height="5" fill="gray"></rect>
-  </svg>
-</div>
-<div class="index-line">
-  <svg id="line" width="400" height="5">
-    <rect width="400" height="5" fill="gray"></rect>
-  </svg>
+<div id="label-container">
+  <div class="housing-line">
+    <svg width="370" height="5">
+      <rect width="370" height="5" fill="#eee"></rect>
+    </svg>
+    <a href="#linktoDemographicTable" class="line-text">Housing Characteristics</a>
+  </div>
+  <div class="index-line">
+    <svg width="487" height="5">
+      <rect width="487" height="5" fill="#eee"></rect>
+    </svg>
+    <a href="#linktoHousingTable" class="line-text">Demographic Characteristics</a>
+  </div>
 </div>
 
-<h4 class="table-header">Housing Table</h4>
-<a name="linktoHousingTable"></a>
-<div id="nav" class="clearfix">
-  <a href="#linktoDemographicTable">Jump to Demographic Table</a>
+<div id="graph-instructions">
+   <h2 id="graph-header">How to use the 2016 Affordable Housing Index Explorer:</h2>
+   <div id="graph-intro">
+     <ul>
+       <li class="move-these">Click on the axis title to color the lines based on that measure</li>
+       <li class="move-these">Click on a row in the tables to highlight it on the chart</li>
+       <li>Click and drag on axes to select portions of the data</li>
+       <li>Click elsewhere on the same axis to reset selection</li>
+       <li>
+         <a href="#linktoDataNotes">Link to Data Notes</a>
+       </li>
+     </ul>
+   </div>
+   <img src="Image.png" alt="Example Graph Screenshot" id="Screenshot">
+</div>
+
+<div id="index-info">
+  <h4 id="first-table-header">Housing Table</h4>
+  <div id="index-intro">
+      <text id="index-text">Snippet.</text>
+  </div>
+  <a name="linktoHousingTable"></a>
+  <div id="nav1" class="clearfix">
+    <a href="#linktoDemographicTable">Jump to Demographic Table</a>
+  </div>
 </div>
 <table class="HousingTable"></table>
 
-<h5 class="table-header">Demographic Table</h5>
+<h4 id="second-table-header">Demographic Table</h4>
 <a name="linktoDemographicTable"></a>
-<div id="nav" class="clearfix">
+<div id="nav2" class="clearfix">
   <a href="#linktoHousingTable">Jump to Housing Table</a>
 </div>
 <table class="DemographicTable"></table>
+
+<div id="Data-Notes">
+  <a name="linktoDataNotes"></a>
+  <h5>Data Notes:</h5>
+  <p class="footer-link">All data is taken from the 2016 American Community Surveys <a href="https://www.census.gov/programs-surveys/acs/">https://www.census.gov/programs-surveys/acs/.</a></p>
+  <p class="footer">Index numbers displayed in the tables represent the percentile values for the given characteristic.
+        The values for Median Home Value, Median Rent, Median Income, and Average Commute Time are based on the spread of the median dollar value or average time in minutes for each census tract.
+        The values for Home Vacancy Rate, Rental Vacancy Rate, Unemployment Rate, Population with a Higher Ed Degree, and Public Transportation are based on the spread of the percentage of the population or percentage of homes/apartments in that census tract who share the given characteristic.
+        For example, South Kona is in the 19th percentile for Median Rent and the 66th percentile for Unemployment Rate. </p>
+</div>
 
 </body>
 </html>
