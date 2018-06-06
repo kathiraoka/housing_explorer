@@ -3,19 +3,27 @@
   <head>
     <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=Fjalla+One|Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <title>2016 Affordable Housing Index Explorer</title>
   </head>
   <body>
-    <header class="c-global-header">
-      <div class="l-wrapper">
-        <h1>2016 Affordable Housing Index Explorer</h1>
+    <header id="c-global-header">
+      <div id="header-div">
+        <div id="house-icon" style="color: orange">
+          <i class="fas fa-home fa-7x" ></i>
+        </div>
+        <div id="page-title-div">
+          <h1>2016 Affordable Housing Index Explorer</h1>
+        </div>
+        <div id="logo-div">
+          <img src="UHERO-Logo-with-Seal-on-white.jpg" alt="UHERO Logo" id="Logo">
+        </div>
       </div>
-      <img src="UHERO-Logo-with-Seal-on-white.jpg" alt="UHERO Logo" id="Logo">
     </header>
+
 <script src="https://d3js.org/d3.v5.js"></script>
 <script src="https://bl.ocks.org/syntagmatic/raw/3341641/render-queue.js"></script>
 <link rel="stylesheet" href="style.css"></link>
-
 <script>
 var margin = {top: 90, right: 130, bottom: 0, left: 160},
     width = document.body.clientWidth - margin.left - margin.right,
@@ -463,12 +471,13 @@ function d3_functor(v) {
    <div id="graph-intro">
      <ul>
        <li class="move-these">Click on the axis title to color the lines based on that measure</li>
-       <li class="move-these">Click on a row in the tables to highlight it on the chart</li>
+       <li class="move-these">Click on a row in the tables to highlight that census tract on the chart</li>
        <li>Click and drag on axes to select portions of the data</li>
        <li>Click elsewhere on the same axis to reset selection</li>
        <li>
          <a href="#linktoDataNotes">Link to Data Notes</a>
        </li>
+
      </ul>
    </div>
    <img src="Image.png" alt="Example Graph Screenshot" id="Screenshot">

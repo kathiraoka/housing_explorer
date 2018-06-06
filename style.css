@@ -1,45 +1,66 @@
 /* header {
   background-color: #c1dae2;
 } */
-h1 {
+header#c-global-header {
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+      margin-top: 0px;
+      margin-right: auto;
+      margin-bottom: 30px;
+      margin-left: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    height: 130px;
+    width: 100%;
+    z-index: 2;
+}
+header div#header-div {
+  width: 100%;
+  height: 150px;
+  text-align: center;
+}
+header h1 {
   margin-top: 30px;
   margin-bottom: 50px;
   text-align: center;
+  align-self: center;
   font-family: 'Fjalla One', sans-serif;
   font-weight: bold;
   font-size: 50px;
   color: #1a6985;
-  width: 1100px;
+  width: 100%;
+  float: none;
+  left: 0px;
+}
+div#page-title-div {
+  align-items: center;
+  align-self: center;
+  text-align: center;
+  width: 900px;
+}
+header div#house-icon {
+  width: 126px;
+  height: 112px;
+  float: left;
+  left: 20px;
+}
+div#logo-div {
+  float: right;
+  width: 160px;
+  height: 130px;
+  right: 20px;
+
 }
 img#Logo {
-  position: relative;
   width: 160px;
-  height: 128px;
-  float: right;
-  top: -157px;
-  right: 30px;
+  height: 130px;
+  right: 0px;
+  top: 0px;
   /* border: 5px solid #1a6985; */
 }
 
-.l-wrapper {
-  text-align: center;
-  margin: 0 auto;
-    margin-top: 0px;
-    margin-right: auto;
-    margin-bottom: 30px;
-    margin-left: auto;
-  max-width: 1100px;
-}
-.c-global-header .l-wrapper {
-    align-items: center;
-    text-align: center;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    min-height: 30px;
-    width: 100%;
-    z-index: 2;
-}
 div.linktoDataNotes {
   width: 974px;
   height: 20px;
@@ -337,12 +358,12 @@ thead tr th {
   stroke-width: .5px;
   cursor: pointer;
 }
-.row--clicked {
+/* .row--clicked {
   fill: yellow;
   stroke: yellow;
   stroke-width: 1px;
   cursor: pointer;
-}
+} */
 
 
 #nav1 {
