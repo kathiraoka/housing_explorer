@@ -102,6 +102,16 @@ img#tree {
   bottom: -6px;
   color: gray;
 }
+
+#snippet {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-style: italic;
+  color: #4D5B5C;
+  width: 100%;
+  text-align: center;
+}
+
 div#logo-div {
   position: relative;
   float: right;
@@ -127,8 +137,8 @@ div.linktoDataNotes {
   margin-top: 5px;
 }
 #graph-instructions {
-  height: 250px;
-  width: 1000px;
+  height: 195px;
+  width: 890px;
   margin-top: 15px;
   left: 17px;
   border: 1px solid #ccc;
@@ -137,7 +147,7 @@ div.linktoDataNotes {
 }
 h2#graph-header {
   position: relative;
-  top: 15px;
+  top: 5px;
   left: 42px;
   float: left;
   font-family: 'Roboto', sans-serif;
@@ -148,8 +158,8 @@ h2#graph-header {
 }
 #graph-intro {
   position: relative;
-  left: -190px;
-  top: 50px;
+  left: -150px;
+  top: 25px;
   width: 500px;
   height: 148px;
   /* border: 1px solid #ccc; */
@@ -174,8 +184,8 @@ li {
 }
 img#Screenshot {
   position: relative;
-  width: 320px;
-  height: 247px;
+  width: 280px;
+  height: 180px;
   float: right;
   top: -165px;
   right: 20px;
@@ -184,7 +194,7 @@ img#Screenshot {
 
 div#index-info {
   width: auto;
-  height: 250px;
+  height: 165px;
 }
 h4#first-table-header {
   position: relative;
@@ -197,7 +207,7 @@ h4#first-table-header {
   height: 50px;
   margin-bottom: 0;
   margin-top: 0;
-  top: -120px;
+  top: -100px;
   clear: both;
 }
 h4#second-table-header {
@@ -443,7 +453,7 @@ thead tr th {
  width: 200px;
  margin-top: 0px;
  margin-bottom: 10px;
- bottom: 115px;
+ bottom: 90px;
 }
 #nav2 {
  position: relative;

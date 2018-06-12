@@ -20,7 +20,8 @@
         </div>
       </div>
     </header>
-    <a name="linktoHousingTable"></a>
+    <a name="linktoTop"></a>
+    <p id="snippet">Compare the housing and demographic characteristics of different census tracts to learn more about the Hawaii housing market.</p>
 
 <script src="https://d3js.org/d3.v5.js"></script>
 <script src="https://bl.ocks.org/syntagmatic/raw/3341641/render-queue.js"></script>
@@ -457,13 +458,13 @@ function d3_functor(v) {
     <svg width="370" height="5">
       <rect width="370" height="5" fill="#eee"></rect>
     </svg>
-    <a href="#linktoDemographicTable" class="line-text">Housing Characteristics</a>
+    <a href="#linktoHousingTable" class="line-text">Housing Characteristics</a>
   </div>
   <div class="index-line">
     <svg width="487" height="5">
       <rect width="487" height="5" fill="#eee"></rect>
     </svg>
-    <a href="#linktoHousingTable" class="line-text">Demographic Characteristics</a>
+    <a href="#linktoDemographicTable" class="line-text">Demographic Characteristics</a>
   </div>
 </div>
 
@@ -473,32 +474,30 @@ function d3_functor(v) {
      <ul>
        <li class="move-these">Click on the axis title to color the lines based on that measure</li>
        <li class="move-these">Click on a row in the tables to highlight that census tract on the chart</li>
-       <li>Click and drag on axes to select portions of the data</li>
+       <li>Click and drag on one or more axes to select ranges of values</li>
        <li>Click elsewhere on the same axis to reset selection</li>
        <li>
-         <a href="#linktoDataNotes">Link to Data Notes</a>
+         <a href="#linktoDataNotes">Jump to Data Notes</a>
        </li>
 
      </ul>
    </div>
-   <img src="Image.png" alt="Example Graph Screenshot" id="Screenshot">
+   <img src="Image-2.png" alt="Example Graph Screenshot" id="Screenshot">
 </div>
 
 <div id="index-info">
-  <h4 id="first-table-header">Housing Table</h4>
-  <div id="index-intro">
-      <text id="index-text">Snippet.</text>
-  </div>
+  <h4 id="first-table-header">Housing Characteristics</h4>
+  <a name="linktoHousingTable"></a>
   <div id="nav1" class="clearfix">
     <a href="#linktoDemographicTable">Jump to Demographic Table</a>
   </div>
 </div>
 <table class="HousingTable"></table>
 
-<h4 id="second-table-header">Demographic Table</h4>
+<h4 id="second-table-header">Demographic Characteristics</h4>
 <a name="linktoDemographicTable"></a>
 <div id="nav2" class="clearfix">
-  <a href="#linktoHousingTable">Back to Top</a>
+  <a href="#linktoTop">Back to Top</a>
 </div>
 <table class="DemographicTable"></table>
 
@@ -511,8 +510,9 @@ function d3_functor(v) {
         The values for Median Home Value, Median Rent, Median Income, and Average Commute Time are based on the spread of the median dollar value or average time in minutes for each census tract.
         The values for Home Vacancy Rate, Rental Vacancy Rate, Unemployment Rate, Population with a Higher Ed Degree, and Public Transportation are based on the spread of the percentage of the population or percentage of homes/apartments in that census tract who share the given characteristic.
         For example, South Kona is in the 19th percentile for Median Rent and the 66th percentile for Unemployment Rate. </p>
+        <p>* Data Unavailable</p>
         <p><text x="0" y="115" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">House icons created by Tengwan</text><text x="0" y="120" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">from the Noun Project</text></p>
-        <p><text x="0" y="39" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">Created by myiconfinder</text><text x="0" y="44" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">from the Noun Project</text></p>
+        <p><text x="0" y="39" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">Fire hydrant created by myiconfinder</text><text x="0" y="44" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">from the Noun Project</text></p>
         <p><text x="0" y="115" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">Tree icon created by Artem  Kovyazin</text><text x="0" y="120" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">from the Noun Project</text></p>
   </div>
   <div id="logo-div">
