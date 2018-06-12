@@ -15,47 +15,104 @@ header#c-global-header {
     height: 130px;
     width: 100%;
     z-index: 2;
+    border-bottom: 3px solid #ccc;
 }
 header div#header-div {
+  display: grid;
   width: 100%;
-  height: 150px;
+  grid-template-rows: 130px;
+  grid-template-columns: 110px 25px 90px auto 80px 80px 65px;
   text-align: center;
+}
+div#title-div {
+  grid-row: 1;
+  grid-column: 4;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  align-self: center;
+  width: 100%;
 }
 header h1 {
-  margin-top: 30px;
-  margin-bottom: 50px;
-  text-align: center;
-  align-self: center;
   font-family: 'Fjalla One', sans-serif;
   font-weight: bold;
-  font-size: 50px;
+  font-size: 45px;
   color: #1a6985;
+  vertical-align: middle;
   width: 100%;
-  float: none;
-  left: 0px;
+  margin: 0;
 }
-div#page-title-div {
-  align-items: center;
+img#house-icon-1 {
   align-self: center;
-  text-align: center;
-  width: 900px;
+  grid-column: 3;
+  grid-row: 1;
+  width: 110px;
+  height: 120px;
+  position: relative;
+  bottom: -2px;
+  color: gray;
 }
-header div#house-icon {
-  width: 126px;
-  height: 112px;
-  float: left;
-  left: 20px;
+img#house-icon-2 {
+  align-self: center;
+  grid-column: 5;
+  grid-row: 1;
+  width: 110px;
+  height: 120px;
+  position: relative;
+  bottom: -3px;
+  left: -6px;
+  color: gray;
+}
+img#house-icon-3 {
+  align-self: center;
+  grid-row: 1;
+  grid-column: 1;
+  width: 120px;
+  height: 130px;
+  color: gray;
+}
+img#house-icon-4 {
+  align-self: center;
+  grid-row: 1;
+  grid-column: 6;
+  width: 120px;
+  height: 130px;
+  position: relative;
+  bottom: -2px;
+  left: -4px;
+  color: gray;
+}
+img#fire-hydrant {
+  align-self: center;
+  grid-row: 1;
+  grid-column: 2;
+  width: 40px;
+  height: 60px;
+  position: relative;
+  bottom: -6px;
+  color: gray;
+}
+img#tree {
+  align-self: center;
+  grid-row: 1;
+  grid-column: 7;
+  width: 80px;
+  height: 80px;
+  position: relative;
+  bottom: -6px;
+  color: gray;
 }
 div#logo-div {
+  position: relative;
   float: right;
-  width: 160px;
-  height: 130px;
-  right: 20px;
-
+  width: 140px;
+  height: 110px;
+  right: 15px;
+  top: -110px;
 }
 img#Logo {
-  width: 160px;
-  height: 130px;
+  width: 140px;
+  height: 110px;
   right: 0px;
   top: 0px;
   /* border: 5px solid #1a6985; */
@@ -70,29 +127,32 @@ div.linktoDataNotes {
   margin-top: 5px;
 }
 #graph-instructions {
-  height: 292px;
-  width: 974px;
-  margin-top: 10px;
-  left: 10px;
+  height: 250px;
+  width: 1000px;
+  margin-top: 15px;
+  left: 17px;
+  border: 1px solid #ccc;
+  position: relative;
+  align-items: center;
 }
 h2#graph-header {
   position: relative;
-  top: 20px;
-  left: 10px;
+  top: 15px;
+  left: 42px;
   float: left;
   font-family: 'Roboto', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   color: #4D5B5C;
   margin-bottom: 0;
 }
 #graph-intro {
   position: relative;
-  left: -226px;
-  top: 70px;
+  left: -190px;
+  top: 50px;
   width: 500px;
   height: 148px;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   text-align: left;
   margin-top: 20px;
 }
@@ -105,7 +165,8 @@ ul {
   margin: 0;
 }
 li {
-  margin: 0;
+  margin-bottom: 8px;
+  left: 10px;
   padding: 0;
   width: 500px;
   list-style-type: circle;
@@ -113,20 +174,22 @@ li {
 }
 img#Screenshot {
   position: relative;
-  width: 347px;
-  height: 263px;
+  width: 320px;
+  height: 247px;
   float: right;
-  top: -150px;
+  top: -165px;
+  right: 20px;
 }
 
 
 div#index-info {
   width: auto;
-  height: 200px;
+  height: 250px;
 }
 h4#first-table-header {
   position: relative;
   font-family: 'Fjalla One', sans-serif;
+  /* font-family: 'Carrois Gothic SC', sans-serif; */
   font-size: 30px;
   font-weight: bold;
   text-align: center;
@@ -134,12 +197,13 @@ h4#first-table-header {
   height: 50px;
   margin-bottom: 0;
   margin-top: 0;
-  top: -115px;
+  top: -120px;
   clear: both;
 }
 h4#second-table-header {
   position: relative;
   font-family: 'Fjalla One', sans-serif;
+  /* font-family: 'Carrois Gothic SC', sans-serif; */
   font-size: 30px;
   font-weight: bold;
   text-align: center;
@@ -185,6 +249,7 @@ div {
   margin: auto;
   width: 50%;
 }
+
 
 .parcoords {
   display: block;
@@ -422,8 +487,17 @@ thead tr th {
  color: #6fcbf3;
 }
 
+div#footer-div {
+  width: 100%;
+  position: relative;
+  border-top: 3px solid #ccc;
+  bottom: -90px;
+}
 div#Data-Notes {
-  width: 90%
+  position: relative;
+  left: -70px;
+  top: -4px;
+  width: 85%;
 }
 h5 {
   font-family: 'Roboto', sans-serif;
